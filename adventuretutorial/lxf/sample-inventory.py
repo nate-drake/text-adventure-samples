@@ -1,5 +1,5 @@
 myinventory = ['Dagger','Gold(10)','apple']
-print ("The Game that should not be")
+print ("My first text adventure sample code with inventory")
 print ("You are standing in a dimly lit room. To the west there is a door. In front of you there is a table. On the table is a rusty key.")
 
 def move_player():

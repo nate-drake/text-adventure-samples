@@ -6,7 +6,7 @@ __author__ = 'Phillip Johnson'
 
 class Player():
     def __init__(self):
-        self.inventory = [items.Gold(15), items.Rock()]
+        self.inventory = [items.Gold(15), items.Shield()]
         self.hp = 100
         self.location_x, self.location_y = world.starting_position
         self.victory = False
@@ -48,6 +48,7 @@ class Player():
                 if i.damage > max_dmg:
                     max_dmg = i.damage
                     best_weapon = i
+                    
 
         print("You use {} against {}!".format(best_weapon.name, enemy.name))
         enemy.hp -= best_weapon.damage

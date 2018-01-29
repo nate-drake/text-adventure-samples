@@ -74,7 +74,11 @@ class LootRoom(MapTile):
         super().__init__(x, y)
 
     def add_loot(self, the_player):
-        the_player.inventory.append(self.item)
+        if self.item not in the_player.inventory:
+            print("You pick it up.")
+            the_player.inventory.append(self.item)
+        else:
+            print("You already have this.")
 
     def modify_player(self, the_player):
         self.add_loot(the_player)
@@ -91,6 +95,16 @@ class FindDaggerRoom(LootRoom):
         """
 
 
+class FindAxeRoom(LootRoom):
+    def __init__(self, x, y):
+        super().__init__(x, y, items.Axe())
+
+    def intro_text(self):
+        return """
+        You notice something in the corner.
+        It's an axe made from black metal!.
+        """
+
 class Find5GoldRoom(LootRoom):
     def __init__(self, x, y):
         super().__init__(x, y, items.Gold(5))
@@ -105,11 +119,30 @@ class EnemyRoom(MapTile):
     def __init__(self, x, y, enemy):
         self.enemy = enemy
         super().__init__(x, y)
-
+                         
     def modify_player(self, the_player):
-        if self.enemy.is_alive():
-            the_player.hp = the_player.hp - self.enemy.damage
-            print("Enemy does {} damage. You have {} HP remaining.".format(self.enemy.damage, the_player.hp))
+        
+          for p in the_player.inventory:
+             if isinstance(p, items.Armour):
+                max_pro = 0
+                if p.protection > max_pro:
+                    max_pro = p.protection
+                        
+                    if self.enemy.is_alive():
+                        
+                        totalenemydamage = (self.enemy.damage - max_pro)
+                        
+                        if totalenemydamage < 0:
+                            totalenemydamage = 0
+                        
+                        the_player.hp = the_player.hp - totalenemydamage
+                        
+                        if max_pro > 1:
+                                print("Your armour absorbs {} HP of the {} HP damage your enemy would have caused caused.".format(max_pro, self.enemy.damage))
+                        
+                        print("Enemy does {} damage. You have {} HP remaining.".format(totalenemydamage, the_player.hp))
+
+                    
 
     def available_actions(self):
         if self.enemy.is_alive():
